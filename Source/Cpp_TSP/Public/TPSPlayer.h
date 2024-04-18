@@ -47,10 +47,53 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UInputAction* IA_Jump;
 
+	UPROPERTY(EditAnywhere)
+	class UInputAction* IA_Gun;
+
+	UPROPERTY(EditAnywhere)
+	class UInputAction* IA_Sniper;
+
+	UPROPERTY(EditAnywhere)
+	class UInputAction* IA_Zoom;
+
+	UPROPERTY(EditAnywhere)
+	class UInputAction* IA_Fire;
+
 	void OnIAMove(const FInputActionValue& value);
 	void OnIALook(const FInputActionValue& value);
 	void OnIAJump(const FInputActionValue& value);
+	void OnIAGun(const FInputActionValue& value);
+	void OnIASniper(const FInputActionValue& value);
+	void OnIAZoomIn(const FInputActionValue& value);
+	void OnIAZoomOut(const FInputActionValue& value);
+	void OnIAFire(const FInputActionValue& value);
 
 	FVector Direction;
 
+	UPROPERTY(EditAnywhere)
+	class USkeletalMeshComponent* GunMesh;
+
+	UPROPERTY(EditAnywhere)
+	class UStaticMeshComponent* SniperMesh;
+
+	bool bChooseSniperGun = false;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> CrosshairUIFactory;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> SniperUIFactory;
+
+	UPROPERTY()
+	class UUserWidget* CrosshairUI;
+
+	UPROPERTY()
+	class UUserWidget* SniperUI;
+
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class ABulletActor> BulletFactory;
+
+	UPROPERTY(EditAnywhere)
+	class UParticleSystem* ExplosionVFXFactory;
 };
