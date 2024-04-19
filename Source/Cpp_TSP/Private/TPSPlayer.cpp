@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "TPSPlayer.h"
@@ -10,6 +10,7 @@
 #include <../../../../../../../Source/Runtime/UMG/Public/Blueprint/UserWidget.h>
 #include "BulletActor.h"
 #include <../../../../../../../Source/Runtime/Engine/Classes/Kismet/GameplayStatics.h>
+#include "Enemy.h"
 
 // Sets default values
 ATPSPlayer::ATPSPlayer()
@@ -70,7 +71,7 @@ void ATPSPlayer::BeginPlay()
 		}
 	}
 
-	// Crosshair¿Í Sniper À§Á¬À» »ı¼ºÇØ¼­ ±â¾ïÇÏ°í½Í´Ù.
+	// Crosshairì™€ Sniper ìœ„ì ¯ì„ ìƒì„±í•´ì„œ ê¸°ì–µí•˜ê³ ì‹¶ë‹¤.
 
 	CrosshairUI = CreateWidget(GetWorld(), CrosshairUIFactory);
 	SniperUI = CreateWidget(GetWorld(), SniperUIFactory);
@@ -78,7 +79,7 @@ void ATPSPlayer::BeginPlay()
 	CrosshairUI->AddToViewport();
 	SniperUI->AddToViewport();
 
-	// ÅÂ¾î³¯ ¶§ ±âº»ÃÑÀ¸·Î º¸ÀÌ°Ô ÇÏ°í½Í´Ù.
+	// íƒœì–´ë‚  ë•Œ ê¸°ë³¸ì´ìœ¼ë¡œ ë³´ì´ê²Œ í•˜ê³ ì‹¶ë‹¤.
 	OnIAGun(FInputActionValue());
 
 }
@@ -88,7 +89,7 @@ void ATPSPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// Àı´ëÀûÀÎ ¹æÇâÀ» ³ª¸¦ ±âÁØÀ¸·Î È¸ÀüÇÏ°í½Í´Ù.
+	// ì ˆëŒ€ì ì¸ ë°©í–¥ì„ ë‚˜ë¥¼ ê¸°ì¤€ìœ¼ë¡œ íšŒì „í•˜ê³ ì‹¶ë‹¤.
 	Direction = FTransform(GetControlRotation()).TransformVector(Direction);
 	AddMovementInput(Direction);
 
@@ -137,11 +138,11 @@ void ATPSPlayer::OnIAJump(const FInputActionValue& value)
 void ATPSPlayer::OnIAGun(const FInputActionValue& value)
 {
 	bChooseSniperGun = false;
-	// À¯ÅºÃÑÀÌ º¸ÀÌ°í, ½º³ªÀÌÆÛ°¡ ¾Èº¸ÀÌ°Ô
+	// ìœ íƒ„ì´ì´ ë³´ì´ê³ , ìŠ¤ë‚˜ì´í¼ê°€ ì•ˆë³´ì´ê²Œ
 	GunMesh->SetVisibility(true);
 	SniperMesh->SetVisibility(false);
 
-	// UI¸¦ º¸ÀÌÁö ¾Ê°Ô ÇÏ°í½Í´Ù.
+	// UIë¥¼ ë³´ì´ì§€ ì•Šê²Œ í•˜ê³ ì‹¶ë‹¤.
 	CrosshairUI->SetVisibility(ESlateVisibility::Hidden);
 	SniperUI->SetVisibility(ESlateVisibility::Hidden);
 }
@@ -149,11 +150,11 @@ void ATPSPlayer::OnIAGun(const FInputActionValue& value)
 void ATPSPlayer::OnIASniper(const FInputActionValue& value)
 {
 	bChooseSniperGun = true;
-	// À¯ÅºÃÑÀÌ ¾Èº¸ÀÌ°í, ½º³ªÀÌÆÛ°¡ º¸ÀÌ°Ô
+	// ìœ íƒ„ì´ì´ ì•ˆë³´ì´ê³ , ìŠ¤ë‚˜ì´í¼ê°€ ë³´ì´ê²Œ
 	GunMesh->SetVisibility(false);
 	SniperMesh->SetVisibility(true);
 
-	// CrosshairUI¸¸ º¸ÀÌ°Ô ÇÏ°í½Í´Ù.
+	// CrosshairUIë§Œ ë³´ì´ê²Œ í•˜ê³ ì‹¶ë‹¤.
 	CrosshairUI->SetVisibility(ESlateVisibility::Visible);
 	SniperUI->SetVisibility(ESlateVisibility::Hidden);
 
@@ -164,7 +165,7 @@ void ATPSPlayer::OnIAZoomIn(const FInputActionValue& value)
 	if (false == bChooseSniperGun)
 		return;
 
-	// SniperUI¸¸ º¸ÀÌ°Ô ÇÏ°í½Í´Ù.
+	// SniperUIë§Œ ë³´ì´ê²Œ í•˜ê³ ì‹¶ë‹¤.
 	CrosshairUI->SetVisibility(ESlateVisibility::Hidden);
 	SniperUI->SetVisibility(ESlateVisibility::Visible);
 
@@ -177,7 +178,7 @@ void ATPSPlayer::OnIAZoomOut(const FInputActionValue& value)
 	if (false == bChooseSniperGun)
 		return;
 
-	// CrosshairUI¸¸ º¸ÀÌ°Ô ÇÏ°í½Í´Ù.
+	// CrosshairUIë§Œ ë³´ì´ê²Œ í•˜ê³ ì‹¶ë‹¤.
 	CrosshairUI->SetVisibility(ESlateVisibility::Visible);
 	SniperUI->SetVisibility(ESlateVisibility::Hidden);
 
@@ -189,7 +190,7 @@ void ATPSPlayer::OnIAFire(const FInputActionValue& value)
 	UE_LOG(LogTemp, Warning, TEXT("OnIAFire"));
 	if (bChooseSniperGun)
 	{
-		// ½º³ªÀÌÆÛ
+		// ìŠ¤ë‚˜ì´í¼
 		FHitResult hitInfo;
 		FVector start = CamComp->GetComponentLocation();
 		FVector end = start + CamComp->GetForwardVector() * 100000;
@@ -199,12 +200,20 @@ void ATPSPlayer::OnIAFire(const FInputActionValue& value)
 		if (bHit)
 		{
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplosionVFXFactory, hitInfo.ImpactPoint);
+
+			// ë¶€ë”ªíŒ ìƒëŒ€ë°©ì´ AEnemyë¼ë©´ ì ì—ê²Œ ë°ë¯¸ì§€ë¥¼ 1ì  ì£¼ê³ ì‹¶ë‹¤.
+			// AEnemyì˜ FSMì˜ OnDamageProcess(1);
+			auto* enemy = Cast<AEnemy>(hitInfo.GetActor());
+			if (enemy)
+			{
+				enemy->OnMyTakeDamage(1);
+			}
 		}
 
 	}
 	else
 	{
-		// ±âº»ÃÑ
+		// ê¸°ë³¸ì´
 		FTransform t = GunMesh->GetSocketTransform(TEXT("FirePosition"));
 		GetWorld()->SpawnActor<ABulletActor>(BulletFactory, t);
 	}
