@@ -96,4 +96,15 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class UParticleSystem* ExplosionVFXFactory;
+
+	// 총을 쏘면 움찔하는 몽타주를 재생하고싶다.
+	UPROPERTY(EditAnywhere)
+	class UAnimMontage* FireAnimMontage;
+
+	// 카메라 진동처리에 필요한 변수
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UCameraShakeBase> CameraShake;
+
+	UPROPERTY(EditAnywhere)
+	class USoundBase* BulletSound;
 };

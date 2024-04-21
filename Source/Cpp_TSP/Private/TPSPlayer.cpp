@@ -36,11 +36,11 @@ ATPSPlayer::ATPSPlayer()
 
 	GunMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("GunMesh"));
 	GunMesh->SetCollisionProfileName(TEXT("NoCollision"));
-	GunMesh->SetupAttachment(GetMesh());
+	GunMesh->SetupAttachment(GetMesh(), TEXT("hand_rSocket"));
 	
 	SniperMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SniperMesh"));;
 	SniperMesh->SetCollisionProfileName(TEXT("NoCollision"));
-	SniperMesh->SetupAttachment(GetMesh());
+	SniperMesh->SetupAttachment(GetMesh(), TEXT("hand_rSocket"));
 
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> TempGunMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Models/FPWeapon/Mesh/SK_FPGun.SK_FPGun'"));
 	if (TempGunMesh.Succeeded())
@@ -52,6 +52,13 @@ ATPSPlayer::ATPSPlayer()
 	if (TempSniperMesh.Succeeded())
 	{
 		SniperMesh->SetStaticMesh(TempSniperMesh.Object);
+	}
+
+	ConstructorHelpers::FObjectFinder<USoundBase> TempBulletSound(TEXT("/Script/Engine.SoundWave'/Game/Models/SniperGun/Rifle.Rifle'"));
+
+	if (TempBulletSound.Succeeded())
+	{
+		BulletSound = TempBulletSound.Object;
 	}
 }
 
@@ -188,6 +195,22 @@ void ATPSPlayer::OnIAZoomOut(const FInputActionValue& value)
 void ATPSPlayer::OnIAFire(const FInputActionValue& value)
 {
 	UE_LOG(LogTemp, Warning, TEXT("OnIAFire"));
+
+	if (CameraShake)
+	{
+		GetWorld()->GetFirstPlayerController()->PlayerCameraManager->StartCameraShake( CameraShake );
+	}
+
+	if (FireAnimMontage)
+	{
+		PlayAnimMontage( FireAnimMontage );
+	}
+
+	if (BulletSound)
+	{
+		UGameplayStatics::PlaySound2D( GetWorld() , BulletSound );
+	}
+
 	if (bChooseSniperGun)
 	{
 		// 스나이퍼
