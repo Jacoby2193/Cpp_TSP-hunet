@@ -208,7 +208,7 @@ void ATPSPlayer::OnIAFire(const FInputActionValue& value)
 
 	if (BulletSound)
 	{
-		UGameplayStatics::PlaySound2D( GetWorld() , BulletSound );
+		UGameplayStatics::PlaySound2D( GetWorld(), BulletSound );
 	}
 
 	if (bChooseSniperGun)

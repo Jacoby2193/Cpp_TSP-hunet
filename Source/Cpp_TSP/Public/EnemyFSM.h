@@ -48,6 +48,13 @@ public:
 	UPROPERTY()
 	class AEnemy* Me;
 
+	UPROPERTY()
+	class UEnemyAnim* EnemyAnim;
+
+	void OnHit();
+
+	void OnAttackEnd();
+
 	void SetState(EEnemyState newState);
 
 	float CurrentTime;
@@ -70,5 +77,7 @@ public:
 	void OnDamageProcess( int damage );
 
 	int HP = 2;
+
+	bool bDieDone;
 
 };

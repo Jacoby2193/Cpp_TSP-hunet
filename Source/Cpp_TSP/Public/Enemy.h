@@ -29,5 +29,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UEnemyFSM* FSM;
 
+	UPROPERTY(EditAnywhere)
+	class UEnemyAnim* EnemyAnim;
+
 	void OnMyTakeDamage(int damage);
 };

@@ -6,6 +6,7 @@
 #include "TPSPlayer.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/CapsuleComponent.h"
+#include "EnemyAnim.h"
 
 // Sets default values for this component's properties
 UEnemyFSM::UEnemyFSM()
@@ -24,6 +25,8 @@ void UEnemyFSM::BeginPlay()
 	Super::BeginPlay();
 
 	Me = Cast<AEnemy>( GetOwner() );
+
+	EnemyAnim = Cast<UEnemyAnim>(Me->GetMesh()->GetAnimInstance());
 
 }
 
@@ -89,28 +92,29 @@ void UEnemyFSM::TickMove()
 	if (dist <= AttackRange) {
 		// 공격상태로 전이하고싶다.
 		SetState( EEnemyState::Attack );
+		EnemyAnim->bAttack = true;
 	}
 }
 
 void UEnemyFSM::TickAttack()
 {
-	// 시간이 흐르다가
-	CurrentTime += GetWorld()->DeltaTimeSeconds;
-	// 만약 현재시간이 공격 대기시간보다 커지면
-	if (CurrentTime > AttackDelayTime) {
-		// 공격을 하고
-		UE_LOG( LogTemp , Warning , TEXT( "Attack!!!" ) );
-		// 현재 시간을 초기화 하고싶다.
-		CurrentTime = 0;
-	}
+	//// 시간이 흐르다가
+	//CurrentTime += GetWorld()->DeltaTimeSeconds;
+	//// 만약 현재시간이 공격 대기시간보다 커지면
+	//if (CurrentTime > AttackDelayTime) {
+	//	// 공격을 하고
+	//	UE_LOG( LogTemp , Warning , TEXT( "Attack!!!" ) );
+	//	// 현재 시간을 초기화 하고싶다.
+	//	CurrentTime = 0;
+	//}
 
-	// 목적지와의 거리를 구하고
-	float dist = Me->GetDistanceTo( Target );
-	// 만약 그 거리가 공격 가능거리보다 크다면
-	if (dist > AttackRange) {
-		// 이동상태로 전이하고싶다.
-		SetState( EEnemyState::Move );
-	}
+	//// 목적지와의 거리를 구하고
+	//float dist = Me->GetDistanceTo( Target );
+	//// 만약 그 거리가 공격 가능거리보다 크다면
+	//if (dist > AttackRange) {
+	//	// 이동상태로 전이하고싶다.
+	//	SetState( EEnemyState::Move );
+	//}
 }
 
 void UEnemyFSM::TickDamage()
@@ -127,6 +131,9 @@ void UEnemyFSM::TickDamage()
 
 void UEnemyFSM::TickDie()
 {
+	if (false == bDieDone)
+		return;
+
 	// 아래방향으로 이동하고싶다.
 	// P = P0 + vt
 	FVector P0 = Me->GetActorLocation();
@@ -143,9 +150,39 @@ void UEnemyFSM::TickDie()
 	}
 }
 
+void UEnemyFSM::OnHit()
+{
+	// 목적지와의 거리를 구하고
+	float dist = Me->GetDistanceTo( Target );
+	// 만약 타겟이 공격 가능거리 안에 있으면 공격 시도
+	if (dist <= AttackRange)
+	{
+		UE_LOG( LogTemp , Warning , TEXT( "Attack!!!" ) );
+	}
+}
+
+// 공격 동작이 끝나면 
+void UEnemyFSM::OnAttackEnd()
+{
+	// 목적지와의 거리를 구하고
+	float dist = Me->GetDistanceTo( Target );
+	// 만약 타겟이 공격 가능거리 안에 있으면 공격 시도
+	if (dist <= AttackRange)
+	{
+		EnemyAnim->bAttack = false;
+	}
+	// 그렇지 않다면
+	else
+	{
+		// 이동상태로 전이하고싶다.
+		SetState( EEnemyState::Move );
+	}
+}
+
 void UEnemyFSM::SetState( EEnemyState newState )
 {
 	State = newState;
+	EnemyAnim->State = newState;
 	CurrentTime = 0;
 }
 
@@ -155,10 +192,17 @@ void UEnemyFSM::OnDamageProcess( int damage )
 
 	if (HP > 0) {
 		SetState( EEnemyState::Damage );
+		// 리액션 애니메이션
+		int32 index = FMath::RandRange( 0 , 1 );
+		FString sectionName = FString::Printf( TEXT( "Damage%d" ) , index );
+		EnemyAnim->PlayDamageAnim(FName(*sectionName));
 	}
 	else {
 		Me->GetCapsuleComponent()->SetCollisionEnabled( ECollisionEnabled::NoCollision );
 		SetState( EEnemyState::Die );
+		// 죽음 애니메이션
+		EnemyAnim->PlayDamageAnim(TEXT("Die"));
+		bDieDone = false;
 	}
 }
 
