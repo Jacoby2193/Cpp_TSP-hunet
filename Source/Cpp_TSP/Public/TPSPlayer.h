@@ -107,4 +107,22 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class USoundBase* BulletSound;
+
+	UPROPERTY(EditAnywhere)
+	int32 MaxHP = 3;
+
+	UPROPERTY(EditAnywhere)
+	int32 HP = MaxHP;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> HpUIFactory;
+
+	class UPlayerHPUI* HpUI;
+
+	void OnMyTakeDamage();
+
+	UPROPERTY( EditAnywhere )
+	TSubclassOf<class UUserWidget> GameOverUIFactory;
+
+
 };

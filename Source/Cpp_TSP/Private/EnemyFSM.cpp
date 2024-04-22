@@ -197,6 +197,7 @@ void UEnemyFSM::OnHit()
 	if (dist <= AttackRange)
 	{
 		UE_LOG( LogTemp , Warning , TEXT( "Attack!!!" ) );
+		Target->OnMyTakeDamage();
 	}
 }
 
@@ -208,7 +209,7 @@ void UEnemyFSM::OnAttackEnd()
 	// 만약 타겟이 공격 가능거리 안에 있으면 공격 시도
 	if (dist <= AttackRange)
 	{
-		EnemyAnim->bAttack = false;
+		EnemyAnim->bAttack = true;
 	}
 	// 그렇지 않다면
 	else
