@@ -33,4 +33,7 @@ public:
 	class UEnemyAnim* EnemyAnim;
 
 	void OnMyTakeDamage(int damage);
+
+	UPROPERTY(EditAnywhere)
+	class UNavigationInvokerComponent* NavInvokerComp;
 };

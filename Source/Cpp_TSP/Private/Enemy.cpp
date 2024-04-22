@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include "EnemyFSM.h"
 #include "EnemyAnim.h"
+#include "NavigationInvokerComponent.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -29,6 +30,8 @@ AEnemy::AEnemy()
 
 	FSM = CreateDefaultSubobject<UEnemyFSM>(TEXT("FSM"));
 
+	NavInvokerComp = CreateDefaultSubobject<UNavigationInvokerComponent>( TEXT("NavInvokerComp"));
+	NavInvokerComp->SetGenerationRadii( 500 , 800 );
 }
 
 // Called when the game starts or when spawned

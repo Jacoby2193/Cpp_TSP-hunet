@@ -51,6 +51,9 @@ public:
 	UPROPERTY()
 	class UEnemyAnim* EnemyAnim;
 
+	UPROPERTY()
+	class AAIController* AI;
+
 	void OnHit();
 
 	void OnAttackEnd();
@@ -79,5 +82,9 @@ public:
 	int HP = 2;
 
 	bool bDieDone;
+
+	FVector RandomLocation;
+
+	bool GetRandomLocationInNavMesh(FVector origin, float radius, FVector& OutLoc);
 
 };
